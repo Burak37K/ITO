@@ -1,0 +1,10 @@
+div.w3-card-3
+{
+  text-align: center;
+  justify-content:flex-end;
+}
+div.head
+{text-align: center;
+  color: silver;
+  font-family: 'Alegreya', cursive;
+}
