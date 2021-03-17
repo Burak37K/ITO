@@ -1,4 +1,4 @@
-import kwargs as kwargs
+#import kwargs as kwargs
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -10,13 +10,13 @@ kwargs = {'num_workers': 1,'pin_memory': True}
 
 Train = torch.utils.data.DataLoader(datasets.MNIST('data', train=True, download=True,
                                                     transform=transforms.Compose([transforms.ToTensor(),
-                                                    transforms.Normalize((0,1307), (0,3081))])),
+                                                    transforms.Normalize((0.1307), (0.3081))])),
                                                     batch_size= 64,shuffle=True, **kwargs)
 
 
 Test = torch.utils.data.DataLoader(datasets.MNIST('data', train=False,
                                                     transform=transforms.Compose([transforms.ToTensor(),
-                                                    transforms.Normalize((0,1307), (0,3081))])),
+                                                    transforms.Normalize((0.1307), (0.3081))])),
                                                     batch_size= 64,shuffle=True, **kwargs)
 
 class myNet(nn.Module):
@@ -44,11 +44,14 @@ class myNet(nn.Module):
 
 
 model = myNet()
+model.cuda()
 
 optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.8)
 def train(epoch):
         model.train()
         for batch_id, (data, target) in enumerate(Train):
+            data = data.cuda()
+            target = target.cuda()
             data = Variable(data)
             target = Variable(target)
             optimizer.zero_grad()
@@ -59,8 +62,9 @@ def train(epoch):
             optimizer.step()
             print('Epoche',epoch)
 
-
-for epoch in range (1,30):
+if __name__ == '__main__':
+  #freeze_support()
+ for epoch in range (1,30):
     train(epoch)
 
 
